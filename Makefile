@@ -51,6 +51,8 @@ tests:
 	@echo "[>] running unit tests"
 	@echo "[>] ############################################"
 	@python3 -m nose2 -v -F
+	@python3 -m coverage run -m nose2
+	@python3 -m coverage report
 
 
 singletest:
