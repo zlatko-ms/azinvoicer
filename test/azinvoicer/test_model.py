@@ -12,7 +12,7 @@ from azinvoicer.invoice_model import ModelCompliancePicker, ModelCompliancePick,
 
 
 class ModelTestConstants(object):
-    PATH_TO_TEST_REPO = "./azinvoicer/repo/models"
+    PATH_TO_TEST_REPO = "./azinvoicer/models/in"
     STD_MODEL = PATH_TO_TEST_REPO + "/standard.yaml"
 
 
