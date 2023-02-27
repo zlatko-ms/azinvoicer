@@ -8,7 +8,7 @@ class IOTools(object):
     def __init__(self) -> None:
         self.logger = logging.getLogger("IOTools")
 
-    def getFileSize(self, fileName) -> float:
+    def getFileSize(self, fileName: str) -> float:
         file_stats = os.stat(fileName)
         mbSize = file_stats.st_size / (1024 * 1024)
         mbSizeRounded = round(mbSize, 2)
@@ -21,9 +21,9 @@ class IOTools(object):
         f.close()
         self.logger.debug("wrote file " + filePath + " containing " + str(len(items)) + " line(s)")
 
-    def mkdir(self, dirPath) -> None:
+    def mkdir(self, dirPath: str) -> None:
         os.makedirs(dirPath, exist_ok=True)
         self.logger.debug("created dir " + dirPath)
 
-    def mkdirFilePath(self, filePath) -> None:
+    def mkdirFilePath(self, filePath: str) -> None:
         os.makedirs(os.path.dirname(filePath), exist_ok=True)

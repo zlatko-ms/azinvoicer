@@ -1,0 +1,37 @@
+---
+model:
+  mandatoryColumns:
+    # compute, storage , ....
+    serviceFamily: serviceFamily
+    # service category : VirtualMachines, ....
+    meterCategory: meterCategory
+    # sku name : LRS Snapshopts, D3 v2/DS3, ...
+    meterName: leterName
+    # resource location region
+    resourceLocation: resourceLocation
+    # amount in billing currency
+    billedCost:  costInBillingCurrency
+    # billing currency
+    billingCurrency: billingCurrency
+    # the resource tags, usually a json object
+    tags: tags
+    # name of the resource group 
+    resourceGroupName: resourceGroupName
+    # start date for billing period
+    billingPeriodStartDate: billingPeriodStartDate
+    # end date for billing period
+    billingPeriodEndDate: billingPeriodEndDate
+  optionalColumns:
+    # additional location info
+    location: location
+    # sku part number handy for optimizations 
+    partNumber: partNumber
+    # additional info
+    additionalInfo: additionalInfo
+options:
+  # use location to determine the region if resourceLocation is not provided 
+  useLocation: false
+  # record part number for optimization
+  usePartNumber: false
+  # use additional info to determine location or environnement 
+  useAdditionalInfo: false
