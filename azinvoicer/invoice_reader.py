@@ -1,8 +1,4 @@
-import os
 import logging
-import yaml
-from yaml.loader import SafeLoader
-from enum import Enum
 import pandas as pd
 
 from azinvoicer.invoice_model import ModelComplianceLevel, MappingModel
@@ -37,6 +33,6 @@ class InvoiceParser(object):
 
     def parseInputTable(self, table: pd.DataFrame) -> list:
 
-        envTables: list = list()
+        # envTables: list = list()
 
         pass

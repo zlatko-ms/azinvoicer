@@ -1,6 +1,5 @@
 import re
 import logging
-import importlib
 from enum import Enum
 
 
@@ -156,7 +155,7 @@ class BasicTagsMapper(EnvironnementMapper):
     ) -> Environnement:
         # check if there is any compelling key in the tags
         key: str = TagMatcher.getEnvKey(tags)
-        if key == None:
+        if key is None:
             return Environnement.NA
 
         tagvalue = tags[key]

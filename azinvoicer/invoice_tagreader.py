@@ -25,7 +25,7 @@ class TagReader(object):
 
         try:
             data = json.loads(jsonForm)
-        except:
+        except Exception as ex:
             data = dict()
-            cts.logger.debug("error while parsing tags from json : " + jsonForm)
+            cts.logger.debug("error while parsing tags from json : " + jsonForm + " error=" + getattr(ex, "message", repr(ex)))
         return data
