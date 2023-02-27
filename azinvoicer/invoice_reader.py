@@ -1,8 +1,9 @@
 import logging
 import pandas as pd
 
-from azinvoicer.invoice_model import ModelComplianceLevel, MappingModel
+from azinvoicer.invoice_model import ModelComplianceLevel, MappingModel, MandatoryFields
 from azinvoicer.iotools import IOTools
+from azinvoicer.invoice_mappers import EnvironnementMapper
 
 
 class InvoiceLoader(object):
@@ -28,11 +29,40 @@ class InvoiceLoader(object):
 
 
 class InvoiceParser(object):
+
+    __headerDict: dict = {"environnement": []}
+
     def __init__(self) -> None:
         self.__logger = logging.getLogger("InvoiceParser")
 
-    def parseInputTable(self, table: pd.DataFrame) -> list:
+    def __getOutputHeader(self, level: ModelComplianceLevel, model: MappingModel) -> dict:
 
+        outHeader: dict = dict()
+        outHeader.update(self.__headerDict)
+        for m in model.getMandatoryColumnNames():
+            outHeader[m] = []
+        if level == ModelComplianceLevel.MANDATORY_AND_OPTIONAL:
+            for o in model.getOptionalColumnNames():
+                outHeader[o] = []
+        return outHeader
+
+    def parseInputTable(self, level: ModelComplianceLevel, model: MappingModel, mapper:EnvironnementMapper , table: pd.DataFrame) -> list:
+
+        parsed = pd.DataFrame(self.__getOutputHeader(level, model))
         # envTables: list = list()
 
-        pass
+        for index, row in table.iterrows():
+            currency: str = row[model.getMandatoryColumnName(MandatoryFields.BILLING_CURRENCY)]
+            billedCost: str = row[model.getMandatoryColumnName(MandatoryFields.BILLED_COST)]
+            billingPeriodStart:str = row[model.getMandatoryColumnName(MandatoryFields.BILLING_PERIOD_START)]
+            billingPeriodEnd:str = row[model.getMandatoryColumnName(MandatoryFields.BILLING_PERIOD_END)]
+            billingPeriodEnd:str = row[model.getMandatoryColumnName(MandatoryFields.BILLING_PERIOD_END)]
+            category:str = row[model.getMandatoryColumnName(MandatoryFields.METER_CATEGORY)]
+            sku:str = row[model.getMandatoryColumnName(MandatoryFields.METER_NAME)]
+            
+
+
+            resourceGroupName:str = row[model.getMandatoryColumnName(MandatoryFields.RESOURCE_GROUP_NAME)]
+            rgName = rgName + "wtf"
+
+        return parsed
