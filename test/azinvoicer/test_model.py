@@ -7,8 +7,11 @@ from azinvoicer.invoice_model import (
     OptionFlags,
     MappingModelRepository,
     ModelComplianceChecker,
+    ModelCompliancePicker,
+    ModelCompliancePick,
+    ModelComplianceLevel,
+    OutputModel,
 )
-from azinvoicer.invoice_model import ModelCompliancePicker, ModelCompliancePick, ModelComplianceLevel
 
 
 class ModelTestConstants(object):
@@ -89,6 +92,7 @@ class TestMappingModel(unittest.TestCase):
         self.assertEqual(mappingModel.getOption(OptionFlags.USE_ADDITIONAL_INFO), False, "option additional info is accurate")
         self.assertEqual(mappingModel.getOption(OptionFlags.USE_LOCATION), False, "option location is accurate")
         self.assertEqual(mappingModel.getOption(OptionFlags.USE_PART_NUMBER), False, "option part number info is accurate")
+        self.assertEqual(mappingModel.getOption(OptionFlags.DATE_FORMAT), "%m/%d/%Y", "date format is accurate")
 
     def test_list_mandatory(self) -> None:
         # given a model descrition file
@@ -242,6 +246,30 @@ class TestModelCompliancePicker(unittest.TestCase):
         self.assertEqual(
             bestPick.getLevel(), ModelComplianceLevel.NOT_COMPLIANT, "not compliant files get a non compliant rating"
         )
+
+
+class TestOutputModel(unittest.TestCase):
+
+    PATH_TO_OUT_MODEL = "./azinvoicer/models/out/standard.yaml"
+
+    def test_column_names_out(self) -> None:
+        # given the model is loaded
+        model: OutputModel = OutputModel(self.PATH_TO_OUT_MODEL)
+        # then all the mandatory columns are correctly mapped
+        self.assertEqual("ServiceFamily", model.getColumName(MandatoryFields.SERVICE_FAMILY))
+        self.assertEqual("ServiceCategory", model.getColumName(MandatoryFields.METER_CATEGORY))
+        self.assertEqual("SkuName", model.getColumName(MandatoryFields.METER_NAME))
+        self.assertEqual("ResourceLocation", model.getColumName(MandatoryFields.RESOURCE_LOCATION))
+        self.assertEqual("Cost", model.getColumName(MandatoryFields.BILLED_COST))
+        self.assertEqual("Currency", model.getColumName(MandatoryFields.BILLING_CURRENCY))
+        self.assertEqual("ResourceGroupName", model.getColumName(MandatoryFields.RESOURCE_GROUP_NAME))
+        self.assertEqual("Tags", model.getColumName(MandatoryFields.TAGS))
+        self.assertEqual("StartDate", model.getColumName(MandatoryFields.BILLING_PERIOD_START))
+        self.assertEqual("EndDate", model.getColumName(MandatoryFields.BILLING_PERIOD_END))
+        # and all the optional columns are correctly mapped
+        self.assertEqual("Location", model.getColumName(OptionalFields.LOCATION))
+        self.assertEqual("PartNumber", model.getColumName(OptionalFields.PART_NUMBER))
+        self.assertEqual("AdditionalInfo", model.getColumName(OptionalFields.ADDITIONAL_INFO))
 
 
 if __name__ == "__main__":

@@ -35,3 +35,5 @@ options:
   usePartNumber: false
   # use additional info to determine location or environnement 
   useAdditionalInfo: false
+  # date format
+  dateFormat: "%m/%d/%Y"

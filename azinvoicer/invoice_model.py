@@ -50,6 +50,15 @@ class OptionFlags(object):
     USE_LOCATION: str = "useLocation"
     USE_PART_NUMBER: str = "usePartNumber"
     USE_ADDITIONAL_INFO: str = "useAdditionalInfo"
+    DATE_FORMAT: str = "dateFormat"
+
+
+class ModelLoader(object):
+    @classmethod
+    def loadYamlFile(self, filePath: str) -> dict:
+        with open(filePath, "r") as f:
+            data = yaml.load(f, Loader=SafeLoader)
+            return data
 
 
 class MappingModel(object):
@@ -58,14 +67,9 @@ class MappingModel(object):
     __modelData: dict = dict()
     __modelName: str
 
-    def __loadYamlFile(self, filePath: str) -> dict:
-        with open(filePath, "r") as f:
-            data = yaml.load(f, Loader=SafeLoader)
-            return data
-
     def __init__(self, filePath: str) -> None:
         self.__logger = logging.getLogger("MappingModel")
-        self.__modelData = self.__loadYamlFile(filePath)
+        self.__modelData = ModelLoader.loadYamlFile(filePath)
         modelName = os.path.basename(filePath)
         self.__modelName = modelName.replace(".yaml", "").replace(".yml", "")
 
@@ -76,6 +80,11 @@ class MappingModel(object):
         return self.__modelData["model"]["optionalColumns"][fieldMappingConstant]
 
     def getOption(self, optionName: str) -> str:
+        if optionName == OptionFlags.DATE_FORMAT:
+            if OptionFlags.DATE_FORMAT in self.__modelData.keys():
+                return self.__modelData["options"][optionName]
+            else:
+                return "%m/%d/%Y"
         return self.__modelData["options"][optionName]
 
     def getMandatoryColumnNames(self) -> list:
@@ -92,6 +101,19 @@ class MappingModel(object):
 
     def getName(self) -> str:
         return self.__modelName
+
+
+class OutputModel(object):
+    """Provides column naming for intermediate and final models"""
+
+    __modelData: dict = dict()
+
+    def __init__(self, filePath: str) -> None:
+        self.__logger = logging.getLogger("OutputModel")
+        self.__modelData = ModelLoader.loadYamlFile(filePath)
+
+    def getColumName(self, mappingName: str) -> str:
+        return self.__modelData["model"]["columns_out"][mappingName]
 
 
 class MappingModelRepository(object):
