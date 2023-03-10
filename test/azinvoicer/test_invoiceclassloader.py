@@ -49,3 +49,7 @@ class TestInvoiceClassLoader(unittest.TestCase):
         loaded = InvoiceClassLoader.loadClassInstance(item)
         # then the class is not loaded
         self.assertTrue(loaded is None)
+
+
+if __name__ == "__main__":
+    unittest.main()

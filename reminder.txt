@@ -1,0 +1,6 @@
+ a=re.sub(pattern=r'("")([\w]+)("")', repl='"\\2"',string=tags)
+
+then """"" => ""
+
+then json parse
+

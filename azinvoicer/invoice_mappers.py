@@ -46,7 +46,7 @@ class CommonMappingTokens(object):
     PROD_TOKENS = ["prod", "production", "prd"]
     PREPROD_TOKENS = ["preprod", "preproduction", "preprd", "pre-prod"]
     STAGING_TOKENS = ["staging"]
-    TEST_TOKENS = ["testing", "test", "tst"]
+    TEST_TOKENS = ["testing", "test", "tst", "uat"]
     DEV_TOKENS = ["dev", "deve"]
     DEMO_TOKENS = ["demo", "show"]
     SANDBOX_TOKENS = ["sandbox", "sdb", "sndbx", "snd"]

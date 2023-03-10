@@ -9,6 +9,7 @@ import pandas as pd
 class MandatoryFields(object):
     """mandatory fields keys"""
 
+    METER_ID: str = "meterId"
     SERVICE_FAMILY: str = "serviceFamily"
     METER_CATEGORY: str = "meterCategory"
     METER_NAME: str = "meterName"
@@ -21,6 +22,7 @@ class MandatoryFields(object):
     BILLING_PERIOD_END: str = "billingPeriodEndDate"
 
     ALL_FIELDS = [
+        METER_ID,
         SERVICE_FAMILY,
         METER_CATEGORY,
         METER_NAME,
@@ -106,14 +108,29 @@ class MappingModel(object):
 class OutputModel(object):
     """Provides column naming for intermediate and final models"""
 
-    __modelData: dict = dict()
+    ENV_FIELD = "environnement"
 
-    def __init__(self, filePath: str) -> None:
-        self.__logger = logging.getLogger("OutputModel")
-        self.__modelData = ModelLoader.loadYamlFile(filePath)
+    __modelData: dict = {
+        "meterId": "MeterId",
+        "serviceFamily": "ServiceFamily",
+        "meterCategory": "ServiceCategory",
+        "meterName": "SkuName",
+        "resourceLocation": "ResourceLocation",
+        "billedCost": "Cost",
+        "billingCurrency": "Currency",
+        "tags": "Tags",
+        "resourceGroupName": "ResourceGroupName",
+        "billingPeriodStartDate": "StartDate",
+        "billingPeriodEndDate": "EndDate",
+        "location": "Location",
+        "partNumber": "PartNumber",
+        "additionalInfo": "AdditionalInfo",
+        ENV_FIELD: "Environnement",
+    }
 
-    def getColumName(self, mappingName: str) -> str:
-        return self.__modelData["model"]["columns_out"][mappingName]
+    @classmethod
+    def getColumName(cts, mappingName: str) -> str:
+        return cts.__modelData[mappingName]
 
 
 class MappingModelRepository(object):

@@ -20,7 +20,10 @@ Describe how to use the project
 
 
 
+Notes : 
 
+ replace in python
+ re.sub(r"(\d+).(\d+)", r"\1,\2", b)
 
 
 

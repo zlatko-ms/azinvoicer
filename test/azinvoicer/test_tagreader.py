@@ -49,3 +49,7 @@ class TestTagReader(unittest.TestCase):
         data: dict = TagReader.getDictFromTags(tags)
         # then keys/values are correctly intepretted
         self.ensure_keyValuesOk(data)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,6 +1,8 @@
 ---
 model:
   mandatoryColumns:
+    # billing counter id
+    meterId: meterId
     # compute, storage , ....
     serviceFamily: serviceFamily
     # service category : VirtualMachines, ....
