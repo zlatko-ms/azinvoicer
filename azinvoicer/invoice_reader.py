@@ -1,7 +1,7 @@
 import logging
 import pandas as pd
 
-from azinvoicer.invoice_record import InvoiceRecord, InvoiceStats
+from azinvoicer.invoice_record import InvoiceStats
 
 from azinvoicer.invoice_model import (
     ModelComplianceLevel,
@@ -23,9 +23,7 @@ class InvoiceLoader(object):
     def __init__(self) -> None:
         self.__logger = logging.getLogger("InvoiceLoader")
 
-    def loadInvoice(
-        self, level: ModelComplianceLevel, model: MappingModel, invoiceFilePath: str
-    ) -> pd.DataFrame:
+    def loadInvoice(self, level: ModelComplianceLevel, model: MappingModel, invoiceFilePath: str) -> pd.DataFrame:
 
         # determine the columns to load according to compliance level
         columns = list()
@@ -36,12 +34,7 @@ class InvoiceLoader(object):
             columns.append(col)
 
         # load only the necessary columns
-        self.__logger.info(
-            "loading invoice file "
-            + invoiceFilePath
-            + " size "
-            + str(IOHelper.getFileSize(invoiceFilePath))
-        )
+        self.__logger.info("loading invoice file " + invoiceFilePath + " size " + str(IOHelper.getFileSize(invoiceFilePath)))
         t = pd.read_csv(invoiceFilePath, skipinitialspace=True, usecols=columns)
         self.__logger.info("loaded invoice")
         return t
@@ -103,32 +96,16 @@ class InvoiceParser(object):
 
         for index, row in table.iterrows():
 
-            currency: str = row[
-                inModel.getMandatoryColumnName(MandatoryFields.BILLING_CURRENCY)
-            ]
-            billedCost: str = row[
-                inModel.getMandatoryColumnName(MandatoryFields.BILLED_COST)
-            ]
-            billingPeriodStart: str = row[
-                inModel.getMandatoryColumnName(MandatoryFields.BILLING_PERIOD_START)
-            ]
-            billingPeriodEnd: str = row[
-                inModel.getMandatoryColumnName(MandatoryFields.BILLING_PERIOD_END)
-            ]
-            family: str = row[
-                inModel.getMandatoryColumnName(MandatoryFields.SERVICE_FAMILY)
-            ]
-            category: str = row[
-                inModel.getMandatoryColumnName(MandatoryFields.METER_CATEGORY)
-            ]
+            currency: str = row[inModel.getMandatoryColumnName(MandatoryFields.BILLING_CURRENCY)]
+            billedCost: str = row[inModel.getMandatoryColumnName(MandatoryFields.BILLED_COST)]
+            billingPeriodStart: str = row[inModel.getMandatoryColumnName(MandatoryFields.BILLING_PERIOD_START)]
+            billingPeriodEnd: str = row[inModel.getMandatoryColumnName(MandatoryFields.BILLING_PERIOD_END)]
+            family: str = row[inModel.getMandatoryColumnName(MandatoryFields.SERVICE_FAMILY)]
+            category: str = row[inModel.getMandatoryColumnName(MandatoryFields.METER_CATEGORY)]
             sku: str = row[inModel.getMandatoryColumnName(MandatoryFields.METER_NAME)]
-            resourceGroupName: str = row[
-                inModel.getMandatoryColumnName(MandatoryFields.RESOURCE_GROUP_NAME)
-            ]
+            resourceGroupName: str = row[inModel.getMandatoryColumnName(MandatoryFields.RESOURCE_GROUP_NAME)]
             tags: str = row[inModel.getMandatoryColumnName(MandatoryFields.TAGS)]
-            resourceLocation: str = row[
-                inModel.getMandatoryColumnName(MandatoryFields.RESOURCE_LOCATION)
-            ]
+            resourceLocation: str = row[inModel.getMandatoryColumnName(MandatoryFields.RESOURCE_LOCATION)]
 
             environnement: Environnement = mapper.getEnvironnement(
                 family, category, sku, resourceLocation, resourceGroupName, tags
@@ -139,21 +116,15 @@ class InvoiceParser(object):
                 OutputModel.getColumName(MandatoryFields.SERVICE_FAMILY): family,
                 OutputModel.getColumName(MandatoryFields.METER_CATEGORY): category,
                 OutputModel.getColumName(MandatoryFields.METER_NAME): sku,
-                OutputModel.getColumName(MandatoryFields.BILLED_COST): float(
-                    billedCost
-                ),
+                OutputModel.getColumName(MandatoryFields.BILLED_COST): float(billedCost),
                 OutputModel.getColumName(MandatoryFields.BILLING_CURRENCY): currency,
             }
 
             partNum: str = None
             if level == ModelComplianceLevel.MANDATORY_AND_OPTIONAL:
                 if inModel.getOption(OptionFlags.USE_PART_NUMBER):
-                    partNum = row[
-                        inModel.getMandatoryColumnName(OptionalFields.PART_NUMBER)
-                    ]
-                    rowData[
-                        OutputModel.getColumName(OptionalFields.PART_NUMBER)
-                    ] = partNum
+                    partNum = row[inModel.getMandatoryColumnName(OptionalFields.PART_NUMBER)]
+                    rowData[OutputModel.getColumName(OptionalFields.PART_NUMBER)] = partNum
 
             parsed = parsed.append(rowData, ignore_index=True)
             # parsed = pd.concat(parsed, pd.DataFrame([rowData]))
